@@ -36,5 +36,20 @@ namespace ServiceLayerWebApi.Controllers
             }
         }
 
+        [Route("GetUsers")]
+        [HttpGet]
+        public IActionResult Getusers()
+        {
+            try
+            {
+                UserCrud user = new UserCrud(_configuration);
+                var response = user.Getusers();
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

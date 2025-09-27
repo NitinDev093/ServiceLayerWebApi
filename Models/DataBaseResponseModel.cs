@@ -1,6 +1,7 @@
 ﻿namespace ServiceLayerWebApi.Models
 {
-    public class DataBaseResponseModel
+    public class DataBaseResponseModel:UserRequestModel
     {
+        public int Id { get; set; }
     }
 }

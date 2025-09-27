@@ -44,5 +44,49 @@ namespace ServiceLayerWebApi.Services
                 }
             }
         }
+
+        public ApiResponseModel<List<DataBaseResponseModel>> Getusers()
+        {
+            try
+            {
+                ApiResponseModel<List<DataBaseResponseModel>> response= new ApiResponseModel<List<DataBaseResponseModel>>();
+                List<DataBaseResponseModel> users = new List<DataBaseResponseModel>();
+                using (SqlConnection sqlcon=new SqlConnection(connectionString))
+                {
+                    SqlCommand cmd = new SqlCommand("usp_insertUsersTABLE", sqlcon);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    sqlcon.Open();
+                    SqlDataReader rdr=cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        DataBaseResponseModel user = new DataBaseResponseModel();
+                        user.Id = Convert.ToInt32(rdr["id"]);
+                        user.Name = rdr["name"].ToString();
+                        user.Email = rdr["email"].ToString();
+                        user.Password = rdr["password"].ToString();
+                        user.Age = Convert.ToInt32(rdr["age"]);
+                        users.Add(user);
+                    }
+                    if (users.Count>0 && users!=null)
+                    {
+                        response.IsSuccess = true;
+                        response.Message = "Users retrieved successfully";  
+                        response.Data = users;
+                        return response;
+                    }
+                    else
+                    {
+                        response.IsSuccess = false;
+                        response.Message = "No users found";
+                        response.Data = null;
+                        return response;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
